@@ -79,8 +79,6 @@ public class MainServer
 				return;
 			}
 			
-			System.out.println("Server started on port:" + args[0]);
-			
 			new MainServer().run();		
 			
 		}
@@ -94,7 +92,7 @@ public class MainServer
 			server = HttpServer.create(
 					new InetSocketAddress(SERVER_PORT_NUMBER), MAX_WAITING_CONNECTION);
 			
-			String probableAddress = "Could not find a likely choice";
+			String probableAddress = "Could not find a likely IP choice";
 			Enumeration e = NetworkInterface.getNetworkInterfaces();
 			System.out.println("This machine is attached to the following IP addresses:");
 			while(e.hasMoreElements())
@@ -112,8 +110,17 @@ public class MainServer
 			    }
 			}
 			
+			if(probableAddress.equals("Could not find a likely IP choice"))
+			{
+				System.out.println(probableAddress);
+				System.out.println("Server not started");
+				return;
+			}
+			else
+			{
 			System.out.println("\n" + probableAddress + ":" + String.valueOf(SERVER_PORT_NUMBER) + 
 								" <---------- Most likely choice to use from android device");
+			}
 		}
 		catch (IOException e)
 		{
@@ -143,6 +150,7 @@ public class MainServer
 		
 		facade = new ServerFacade(MAX_GENERATIONS);
 		
+		System.out.println("Server started on port:" + SERVER_PORT_NUMBER);
 		server.start();
 	}
 
